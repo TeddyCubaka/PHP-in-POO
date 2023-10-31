@@ -7,35 +7,49 @@ class Person
     private $_degats = 0;
     private $_name;
 
-    public function __construct(string $nom)
+    const LESS_POWER = 20;
+    const AVERAGE_POWER = 50;
+    const STRONG_POWER = 80;
+
+    const LESS_EXPERIENCE = 10;
+    const AVERAGE_EXPERIENCE = 40;
+    const STRONG_EXPERIENCE = 80;
+
+    private static $_textToSay = 'Hey, I can talk';
+    private static $_rudeText  = 'You, mother fucker, I\'m gonna kill you ';
+
+    public function __construct($nom, $power, $experience)
     {
         $this->_name = $nom;
+        $this->_power = $power;
+        $this->_experience = $experience;
     }
-
 
     public function hit(Person $personToHit)
     {
         $personToHit->beenHit($this);
-        $this->gainExperience();
     }
 
-    public function gainPower($power)
+    public function setPower($power)
     {
-        if ($power == null) {
-            $this->_power += 1;
-        } 
-        else if (! is_int($power)) {
+        if (!is_int($power)) {
             trigger_error('La force du personnage doit nécessairement être un entier', E_USER_WARNING);
             return;
         }
-         else $this->_power += $power;
-
-        $this->gainExperience();
+        if (in_array($power, array(self::AVERAGE_POWER, self::LESS_POWER, self::STRONG_POWER))) {
+            $this->_power = $power;
+        }
     }
 
-    public function gainExperience()
+    public function setExperience($experience)
     {
-        $this->_experience += 1;
+        if (!is_int($experience)) {
+            trigger_error('La force du personnage doit nécessairement être un entier', E_USER_WARNING);
+            return;
+        }
+        if (in_array($experience, array(self::AVERAGE_POWER, self::LESS_POWER, self::STRONG_POWER))) {
+            $this->_experience = $experience;
+        }
     }
 
     public function beenHit($hitter)
@@ -57,6 +71,13 @@ class Person
     {
         return $this->_name;
     }
+
+    public static function talk()
+    {
+        return self::$_textToSay;
+    }
+    public static function beRude()
+    {
+        return self::$_rudeText;
+    }
 }
-$person = new Person('kfkf');
-// export(Person());
